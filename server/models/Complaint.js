@@ -42,7 +42,7 @@ const complaintSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['pending', 'in-progress', 'resolved', 'escalated'],
+            enum: ['pending', 'in-progress', 'on-hold', 'resolved', 'escalated'],
             default: 'pending',
         },
         assignedDepartment: {

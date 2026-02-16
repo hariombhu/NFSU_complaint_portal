@@ -141,9 +141,14 @@ const seedDatabase = async () => {
         await Department.insertMany(departments);
         console.log('✅ Departments created');
 
-        // Insert users
-        await User.insertMany(users);
-        console.log('✅ Users created');
+        // Insert users ONE BY ONE to trigger password hashing
+        console.log('👥 Creating users...');
+        for (const userData of users) {
+            const user = new User(userData);
+            await user.save(); // This triggers the pre-save hook to hash password
+            console.log(`   ✅ Created: ${user.email}`);
+        }
+        console.log('✅ All users created');
 
         console.log('');
         console.log('═══════════════════════════════════════════════════════════');

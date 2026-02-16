@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { analyticsService } from '../services/api';
 import { LayoutDashboard, LogOut, Users, FileText, TrendingUp } from 'lucide-react';
@@ -149,8 +150,22 @@ const AdminDashboard = () => {
                             <tbody>
                                 {(analytics?.recentComplaints || []).map((complaint) => (
                                     <tr key={complaint._id} className="border-b hover:bg-gray-50">
-                                        <td className="px-4 py-3 text-sm">{complaint.complaintId}</td>
-                                        <td className="px-4 py-3 text-sm font-medium">{complaint.title}</td>
+                                        <td className="px-4 py-3 text-sm">
+                                            <Link
+                                                to={`/admin/complaint/${complaint._id}`}
+                                                className="text-primary-600 hover:text-primary-800 font-medium"
+                                            >
+                                                {complaint.complaintId}
+                                            </Link>
+                                        </td>
+                                        <td className="px-4 py-3 text-sm font-medium">
+                                            <Link
+                                                to={`/admin/complaint/${complaint._id}`}
+                                                className="hover:text-primary-600"
+                                            >
+                                                {complaint.title}
+                                            </Link>
+                                        </td>
                                         <td className="px-4 py-3 text-sm">{complaint.category}</td>
                                         <td className="px-4 py-3 text-sm">
                                             <span className={`status-${complaint.status} px-2 py-1 rounded text-xs`}>

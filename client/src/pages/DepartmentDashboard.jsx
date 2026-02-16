@@ -2,6 +2,7 @@
 // These will be fully functional but streamlined
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { complaintService } from '../services/api';
 import { LayoutDashboard, LogOut } from 'lucide-react';
@@ -86,20 +87,23 @@ const DepartmentDashboard = () => {
                     <h2 className="text-xl font-bold mb-4">Recent Complaints</h2>
                     <div className="space-y-4">
                         {complaints.slice(0, 10).map((complaint) => (
-                            <div
+                            <Link
                                 key={complaint._id}
-                                className="bg-white border rounded-lg p-4"
+                                to={`/department/complaint/${complaint._id}`}
+                                className="block bg-white border rounded-lg p-4 hover:border-primary-500 hover:shadow-md transition-all"
                             >
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <p className="font-semibold">{complaint.title}</p>
-                                        <p className="text-sm text-gray-600">{complaint.status}</p>
+                                        <p className="font-semibold text-gray-900 hover:text-primary-600">
+                                            {complaint.title}
+                                        </p>
+                                        <p className="text-sm text-gray-600 capitalize">{complaint.status}</p>
                                     </div>
                                     <span className="text-xs text-gray-500">
                                         {new Date(complaint.createdAt).toLocaleDateString()}
                                     </span>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>

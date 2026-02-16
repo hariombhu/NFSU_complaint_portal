@@ -10,7 +10,7 @@ import DepartmentDashboard from './pages/DepartmentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import SubmitComplaint from './pages/SubmitComplaint';
 import TrackComplaints from './pages/TrackComplaints';
-import ComplaintDetail from './pages/ComplaintDetail';
+import ComplaintDetails from './pages/ComplaintDetails';
 import ManageComplaints from './pages/ManageComplaints';
 import UserManagement from './pages/UserManagement';
 
@@ -72,7 +72,7 @@ function App() {
                         path="/student/complaint/:id"
                         element={
                             <ProtectedRoute allowedRoles={['student']}>
-                                <ComplaintDetail />
+                                <ComplaintDetails />
                             </ProtectedRoute>
                         }
                     />
@@ -98,7 +98,7 @@ function App() {
                         path="/department/complaint/:id"
                         element={
                             <ProtectedRoute allowedRoles={['department', 'admin']}>
-                                <ComplaintDetail />
+                                <ComplaintDetails />
                             </ProtectedRoute>
                         }
                     />
@@ -132,7 +132,7 @@ function App() {
                         path="/admin/complaint/:id"
                         element={
                             <ProtectedRoute allowedRoles={['admin']}>
-                                <ComplaintDetail />
+                                <ComplaintDetails />
                             </ProtectedRoute>
                         }
                     />
