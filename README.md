@@ -26,7 +26,9 @@ A comprehensive web application that provides:
 ### Frontend
 - **React.js** (v18.2.0) with Vite
 - **Tailwind CSS** for styling
-- **React Router** for navigation
+- **React Router** (with v7 future flags)
+- **Framer Motion** for premium animations
+- **Three.js & Postprocessing** for WebGL backgrounds (Hyperspeed)
 - **Axios** for API calls
 - **Recharts** for analytics visualization
 - **Lucide React** for icons
@@ -41,11 +43,17 @@ A comprehensive web application that provides:
 
 ### Database
 - **MongoDB** with Mongoose ODM
-- Local MongoDB Compass connection
+- Local MongoDB Compass connection (optimized for 127.0.0.1)
 
 ---
 
-## ✨ Key Features
+## ✨ Key Features & Recent Enhancements
+
+### 🎨 Premium UI/UX
+- **Hyperspeed Background**: Dynamic WebGL-based road animation for a high-tech feel.
+- **Dark Glassmorphism**: Complete redesign of the Student Dashboard and Complaint Details with frosted glass effects and high-contrast typography.
+- **Parallel Loading**: WebGL assets initialize concurrently with data fetching to eliminate wait times.
+- **Zero-Flash Start**: Inline styles prevent white flashes during initial load for a seamless dark-theme experience.
 
 ### 🎓 Student Features
 - Submit complaints with file attachments (up to 5MB)
@@ -70,89 +78,19 @@ A comprehensive web application that provides:
 - Escalation management
 - Performance metrics tracking
 
-### 🚀 Hackathon-Winning Features
-- ⚡ **Real-time notifications** (polling-based)
-- ⏱️ **Auto-escalation** after 7 days of inactivity
-- 📊 **Visual analytics** with interactive charts
-- ⭐ **Star-based feedback** system
-- 📱 **Mobile-first responsive** design
-- 🔍 **Smart search & filtering**
-- 🕵️ **Anonymous complaints** option
-- 🎨 **Glassmorphism UI** with smooth animations
-
----
-
-## 📁 Project Structure
-
-```
-nfsu-complaint-portal/
-├── client/                     # Frontend (React)
-│   ├── src/
-│   │   ├── components/        # Reusable components
-│   │   ├── context/           # Auth context
-│   │   ├── pages/             # Route pages
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── StudentDashboard.jsx
-│   │   │   ├── DepartmentDashboard.jsx
-│   │   │   ├── AdminDashboard.jsx
-│   │   │   ├── SubmitComplaint.jsx
-│   │   │   ├── TrackComplaints.jsx
-│   │   │   ├── ComplaintDetail.jsx
-│   │   │   ├── ManageComplaints.jsx
-│   │   │   └── UserManagement.jsx
-│   │   ├── services/          # API services
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── package.json
-│   └── vite.config.js
-│
-├── server/                    # Backend (Express)
-│   ├── config/
-│   │   └── db.js              # MongoDB connection
-│   ├── controllers/           # Business logic
-│   │   ├── authController.js
-│   │   └── complaintController.js
-│   ├── models/                # Database schemas
-│   │   ├── User.js
-│   │   ├── Complaint.js
-│   │   ├── Department.js
-│   │   └── Notification.js
-│   ├── routes/                # API routes
-│   │   ├── auth.js
-│   │   ├── complaints.js
-│   │   ├── notifications.js
-│   │   ├── departments.js
-│   │   ├── analytics.js
-│   │   └── users.js
-│   ├── middleware/
-│   │   └── auth.js            # JWT authentication
-│   ├── utils/
-│   │   └── autoEscalation.js  # Cron job
-│   ├── seeders/
-│   │   └── seed.js            # Demo data
-│   ├── uploads/               # File storage
-│   ├── server.js
-│   └── package.json
-│
-├── .gitignore
-├── package.json
-└── README.md
-```
-
 ---
 
 ## 🚀 Installation & Setup
 
 ### Prerequisites
 - Node.js (v16 or higher)
-- MongoDB installed locally  - MongoDB Compass (recommended)
+- MongoDB installed locally
 - npm or yarn
 
 ### Step 1: Clone the Repository
 ```bash
-git clone <repository-url>
-cd nfsu-complaint-portal
+git clone https://github.com/hariombhu/NFSU_complaint_portal
+cd NFSU_complaint_portal
 ```
 
 ### Step 2: Install Dependencies
@@ -178,245 +116,85 @@ cd ..
 
 ### Step 3: Set Up MongoDB
 
-1. Install MongoDB Community Edition
-2. Start MongoDB service:
-   ```bash
-   # Windows
-   net start MongoDB
-   
-   # macOS/Linux
-   sudo systemctl start mongod
+1. Start MongoDB service (Administrator/Sudo required):
+   ```powershell
+   # Windows (PowerShell Run as Admin)
+   Start-Service MongoDB
    ```
-3. Open MongoDB Compass and connect to: `mongodb://localhost:27017`
+2. Open MongoDB Compass and connect to: `mongodb://127.0.0.1:27017`
 
 ### Step 4: Configure Environment Variables
 
-The `.env` file is already created in `server/.env` with default values:
+The `.env` file is located in `server/.env`:
 
 ```env
-PORT=5000
+PORT=5001
 NODE_ENV=development
-MONGODB_URI=mongodb://localhost:27017/nfsu_complaint_portal
-JWT_SECRET=your_jwt_secret_key_change_this_in_production_2024_nfsu_portal
+MONGODB_URI=mongodb://127.0.0.1:27017/nfsu_complaint_portal
+JWT_SECRET=your_jwt_secret_key_change_this_in_production
 JWT_EXPIRE=24h
 MAX_FILE_SIZE=5242880
 ESCALATION_DAYS=7
 ```
 
-> **Note**: Change `JWT_SECRET` in production!
+### Step 5: Run the Application
 
-### Step 5: Seed Database (Demo Data)
-
-```bash
-cd server
-npm run seed
-cd ..
-```
-
-This will create:
-- 7 departments (Canteen, Academic, Maintenance, etc.)
-- Admin, department users, and sample students
-- Sample credentials will be displayed in the terminal
-
-### Step 6: Run the Application
-
-#### Option 1: Run both servers concurrently (from root)
+#### Run both servers concurrently (from root)
 ```bash
 npm run dev
 ```
 
-#### Option 2: Run servers separately
+### Step 6: Access the Application
 
-**Terminal 1 - Backend:**
-```bash
-cd server
-npm run dev
-```
-
-**Terminal 2 - Frontend:**
-```bash
-cd client
-npm run dev
-```
-
-### Step 7: Access the Application
-
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000/api
+- **Frontend**: [http://localhost:5000](http://localhost:5000)
+- **Backend API**: [http://localhost:5001/api](http://localhost:5001/api)
 
 ---
 
 ## 🔐 Sample Login Credentials
 
 ### Admin
-- **Email**: `admin@nfsu.ac.in`
-- **Password**: `admin123`
+- **Email**: `admin@nfsu.ac.in` | **Password**: `admin123`
 
 ### Department (Canteen)
-- **Email**: `canteen@nfsu.ac.in`
-- **Password**: `canteen123`
-
-### Department (Academic)
-- **Email**: `academic@nfsu.ac.in`
-- **Password**: `academic123`
+- **Email**: `canteen@nfsu.ac.in` | **Password**: `canteen123`
 
 ### Student
-- **Email**: `rahul.sharma@nfsu.ac.in`
-- **Password**: `student123`
-- **Student ID**: `NFSU2024001`
-
----
-
-## 📊 Database Schema
-
-### User Collection
-```javascript
-{
-  name: String,
-  email: String (unique),
-  password: String (hashed),
-  role: Enum ['student', 'department', 'admin'],
-  department: String (for department users),
-  studentId: String (for students)
-}
-```
-
-### Complaint Collection
-```javascript
-{
-  complaintId: String (auto-generated: NFSUYYMM0001),
-  studentId: ObjectId (ref: User),
-  category: Enum [departments],
-  title: String,
-  description: String,
-  priority: Enum ['low', 'medium', 'high'],
-  status: Enum ['pending', 'in-progress', 'resolved', 'escalated'],
-  assignedDepartment: String,
-  attachments: Array,
-  anonymous: Boolean,
-  resolutionRemarks: String,
-  feedback: { rating: Number, comment: String },
-  statusHistory: Array
-}
-```
+- **Email**: `rahul.sharma@nfsu.ac.in` | **Password**: `student123` | **ID**: `NFSU2024001`
 
 ---
 
 ## 🎨 UI/UX Highlights
 
-- **Glassmorphism Design**: Modern frosted glass effect
-- **University Theme**: Professional blue color palette
-- **Responsive**: Mobile-first design
-- **Animations**: Smooth transitions and hover effects
-- **Status Badges**: Color-coded complaint statuses
-- **Inter Font**: Clean, modern typography
+- **Hyperspeed Engine**: Optimized WebGL rendering for low-end devices.
+- **Glass-Dark Theme**: Luxury aesthetic using `backdrop-blur-xl` and translucent overlays.
+- **Smooth Transitions**: `AnimatePresence` for seamless page navigation.
+- **Accessibility**: High-contrast text on dark backgrounds for readability.
 
 ---
 
 ## 🔒 Security Features
 
-✅ Password hashing with bcrypt (10 salt rounds)  
+✅ Password hashing with bcrypt  
 ✅ JWT-based authentication  
 ✅ Role-based access control (RBAC)  
-✅ HTTP-only cookies support  
-✅ File upload validation (type & size)  
-✅ Input sanitization  
-✅ CORS configuration  
+✅ File upload validation  
 ✅ Environment variable protection  
-
----
-
-## 📈 Future Enhancements
-
-- [ ] Real-time WebSocket notifications
-- [ ] Email notification system
-- [ ] AI chatbot for complaint categorization
-- [ ] Mobile app (React Native)
-- [ ] Advanced analytics with ML predictions
-- [ ] Multi-language support (Hindi, English)
-- [ ] PDF report generation
-- [ ] SMS notifications for critical updates
-- [ ] Integration with university ERP system
-
----
-
-## 🏆 Hackathon Impact Statement
-
-This platform addresses a critical pain point in university administration by:
-
-1. **Reducing Resolution Time** by 60% through automated routing and escalation
-2. **Increasing Transparency** with real-time tracking and status updates
-3. **Improving Accountability** through documented complaint history
-4. **Enhancing Student Satisfaction** with structured feedback mechanism
-5. **Providing Data-Driven Insights** for administrative decision-making
-
-**Real-World Applicability**: This system can be deployed in:
-- Universities and colleges
-- Government institutions
-- Corporate organizations
-- Residential communities
-- Municipal complaint systems
 
 ---
 
 ## 📝 API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register student
 - `POST /api/auth/login` - Login user
-- `GET /api/auth/me` - Get current user
 - `POST /api/auth/logout` - Logout user
+- `GET /api/auth/me` - Get current profile
 
 ### Complaints
-- `GET /api/complaints` - Get all complaints (filtered by role)
-- `POST /api/complaints` - Create complaint
-- `GET /api/complaints/:id` - Get complaint details
-- `PUT /api/complaints/:id/status` - Update status (department/admin)
-- `PUT /api/complaints/:id/feedback` - Submit feedback (student)
-- `GET /api/complaints/stats/dashboard` - Get statistics
-
-### Notifications
-- `GET /api/notifications` - Get user notifications
-- `PUT /api/notifications/:id/read` - Mark as read
-- `PUT /api/notifications/read-all` - Mark all as read
-
-### Analytics (Admin)
-- `GET /api/analytics/dashboard` - Get system analytics
-- `GET /api/analytics/department/:dept` - Department analytics
-
-### Users (Admin)
-- `GET /api/users` - Get all users
-- `POST /api/users` - Create user
-- `PUT /api/users/:id` - Update user
-- `DELETE /api/users/:id` - Delete user
-
----
-
-## 🐛 Troubleshooting
-
-### MongoDB Connection Error
-```bash
-# Check if MongoDB is running
-mongod --version
-
-# Start MongoDB service
-net start MongoDB  # Windows
-sudo systemctl start mongod  # Linux/macOS
-```
-
-### Port Already in Use
-```bash
-# Kill process on port 3000 (frontend)
-npx kill-port 3000
-
-# Kill process on port 5000 (backend)
-npx kill-port 5000
-```
-
-### File Upload Not Working
-- Check `server/uploads` folder exists
-- Verify file size is under 5MB
-- Ensure file type is allowed (images, PDF, DOC)
+- `GET /api/complaints` - List complaints (role-specific)
+- `POST /api/complaints` - Submit new complaint
+- `GET /api/complaints/:id` - view detailed status
+- `PUT /api/complaints/:id/status` - Update status (Staff only)
 
 ---
 
@@ -428,23 +206,7 @@ Developed for NFSU by the Development Team
 
 ## 📄 License
 
-MIT License - Feel free to use this project for educational and hackathon purposes.
-
----
-
-## 🙏 Acknowledgments
-
-- National Forensic Sciences University (NFSU) for the problem statement
-- React.js and Express.js communities for excellent documentation
-- All open-source contributors
-
----
-
-## 📞 Support
-
-For issues or questions:
-- Create an issue in the repository
-- Contact: support@nfsu.ac.in
+MIT License
 
 ---
 
