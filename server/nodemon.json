@@ -1,0 +1,8 @@
+{
+    "signal": "SIGTERM",
+    "delay": 500,
+    "ignore": [
+        "uploads/*",
+        "*.log"
+    ]
+}

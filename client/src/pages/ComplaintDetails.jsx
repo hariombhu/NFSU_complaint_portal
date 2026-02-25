@@ -269,34 +269,56 @@ const ComplaintDetails = () => {
                                     Attachments
                                 </h2>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {complaint.attachments.map((file, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex items-center justify-between p-5 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors group"
-                                        >
-                                            <div className="flex items-center space-x-4">
-                                                <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center">
-                                                    <FileText className="w-6 h-6 text-orange-500" />
-                                                </div>
-                                                <div className="max-w-[150px] md:max-w-xs">
-                                                    <p className="font-bold text-white truncate">{file.originalName}</p>
-                                                    <p className="text-xs text-gray-500 font-bold">
-                                                        {(file.size / 1024).toFixed(2)} KB
-                                                    </p>
+                                    {complaint.attachments.map((file, index) => {
+                                        // Normalize path: multer may store full OS path or relative path
+                                        // Extract just the filename in case it's a full path like uploads\file.jpg
+                                        const rawPath = file.path || file.filename || '';
+                                        const fileName = rawPath.replace(/\\/g, '/').split('/uploads/').pop() || rawPath.split('/').pop() || rawPath;
+                                        const fileUrl = `/uploads/${fileName}`;
+                                        const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(file.originalName || fileName);
+
+                                        return (
+                                            <div
+                                                key={index}
+                                                className="flex flex-col p-5 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors group gap-3"
+                                            >
+                                                {/* Image preview */}
+                                                {isImage && (
+                                                    <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+                                                        <img
+                                                            src={fileUrl}
+                                                            alt={file.originalName}
+                                                            className="w-full max-h-48 object-cover rounded-lg border border-white/10"
+                                                            onError={e => { e.target.style.display = 'none'; }}
+                                                        />
+                                                    </a>
+                                                )}
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                            <FileText className="w-6 h-6 text-orange-500" />
+                                                        </div>
+                                                        <div className="max-w-[150px] md:max-w-xs">
+                                                            <p className="font-bold text-white truncate text-sm">{file.originalName || fileName}</p>
+                                                            <p className="text-xs text-gray-500 font-bold">
+                                                                {file.size ? `${(file.size / 1024).toFixed(2)} KB` : 'File'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <a
+                                                        href={fileUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        download={file.originalName || fileName}
+                                                        className="p-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors flex-shrink-0"
+                                                        title="Download / View Attachment"
+                                                    >
+                                                        <Download className="w-4 h-4" />
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <a
-                                                href={`http://localhost:5001/${file.path}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                download
-                                                className="p-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
-                                                title="Download Attachment"
-                                            >
-                                                <Download className="w-4 h-4" />
-                                            </a>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </motion.div>
                         )}

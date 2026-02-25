@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve uploaded files statically
+// Serve uploaded files statically (absolute path — works regardless of cwd)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes
@@ -79,7 +79,7 @@ startAutoEscalation();
 // Start server
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log('');
     console.log('🚀 ═══════════════════════════════════════════════════════════');
     console.log(`🎓 NFSU Complaint Portal Server`);
@@ -90,9 +90,31 @@ app.listen(PORT, () => {
     console.log('');
 });
 
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
-    console.log(`❌ Error: ${err.message}`);
-    // Close server & exit process
-    process.exit(1);
+// Handle port already in use — prevents nodemon crash loop
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`\n❌ Port ${PORT} is already in use.`);
+        console.error(`   Run: netstat -ano | findstr :${PORT} → then taskkill /PID <pid> /F\n`);
+        process.exit(1);
+    } else {
+        throw err;
+    }
 });
+
+// Graceful shutdown — frees port so next restart doesn't conflict
+const shutdown = (signal) => {
+    console.log(`\n🛑 ${signal} received — shutting down gracefully...`);
+    server.close(() => {
+        console.log('✅ Server closed.');
+        process.exit(0);
+    });
+};
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+    console.log(`❌ Unhandled Rejection: ${err.message}`);
+    server.close(() => process.exit(1));
+});
+

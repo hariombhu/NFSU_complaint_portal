@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const {
     createComplaint,
     getComplaints,
@@ -13,10 +14,16 @@ const { protect, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Ensure uploads directory exists (absolute path)
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        cb(null, uploadsDir);
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -28,18 +35,12 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    // Allowed file types
-    const allowedTypes = /jpeg|jpg|png|pdf|doc|docx/;
-    const extname = allowedTypes.test(
-        path.extname(file.originalname).toLowerCase()
-    );
-    const mimetype = allowedTypes.test(file.mimetype);
-
-    if (mimetype && extname) {
+    // Check by extension only — mimetype strings like "image/jpeg" cause false negatives
+    const allowedExt = /\.(jpeg|jpg|png|gif|webp|pdf|doc|docx)$/i;
+    if (allowedExt.test(path.extname(file.originalname))) {
         return cb(null, true);
-    } else {
-        cb(new Error('Only images and documents are allowed'));
     }
+    cb(new Error('Only images (JPG, PNG) and documents (PDF, DOC, DOCX) are allowed'));
 };
 
 const upload = multer({

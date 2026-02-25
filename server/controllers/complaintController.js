@@ -28,7 +28,7 @@ exports.createComplaint = async (req, res) => {
             complaintData.attachments = req.files.map((file) => ({
                 filename: file.filename,
                 originalName: file.originalname,
-                path: file.path,
+                path: file.filename,          // store ONLY filename, not full OS path
                 mimetype: file.mimetype,
                 size: file.size,
             }));
